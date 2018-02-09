@@ -51,10 +51,7 @@ namespace FileSystemVisitor
             var fileList = System.IO.Directory.GetFileSystemEntries(_startAddress, "*.*", SearchOption.AllDirectories)
                 .Where((s) => 
                 {
-                    if (StopSerach==true)
-                    {
-                        return false;
-                    }
+                    
                     if (Directory.Exists(s))
                     {
                         DirectoryFinded?.Invoke(this, new FindedProgressArgs { FoundedName = s });
@@ -65,6 +62,14 @@ namespace FileSystemVisitor
                         FileFinded?.Invoke(this, new FindedProgressArgs { FoundedName = s });
                         return CheckConditions(s);
                     }
+                }).TakeWhile((f)=>
+                {
+                    if (StopSerach == true)
+                    {
+                        return false;
+                    }
+                    else
+                        return true;
                 }).ToList();
             Finish?.Invoke(this, null);
             StopSerach = false;
