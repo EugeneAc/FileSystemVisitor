@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace FileSystemVisitor
 {
@@ -18,17 +12,9 @@ namespace FileSystemVisitor
             visor.Finish += (s, e) => Console.WriteLine("Finished");
             visor.FileFinded += (s, e) => Console.WriteLine("File Finded " + e.FoundedName);
             visor.DirectoryFinded += (s, e) => Console.WriteLine("Dir Finded " + e.FoundedName);
-            visor.FilteredDirectoryFinded += (s, e) => Console.WriteLine("Filtered Dir Finded " + e.FoundedName);
-            visor.FilteredFileFinded += (s, e) =>
-            {
-                var sender = (FileSystemVisitor)s;
-                Console.WriteLine("Filtered File Finded " + e.FoundedName);
-                if (e.FoundedName.Contains("1"))
-                {
-                    sender.StopSerach = true;
-                    Console.WriteLine("!");
-                }
-            };
+            visor.FilteredDirectoryFinded += FilteredDirFound;
+            visor.FilteredFileFinded += FilteredFileFound;
+
             Console.WriteLine(" ");
 
             foreach (var file in visor)
@@ -36,6 +22,19 @@ namespace FileSystemVisitor
                 Console.WriteLine(file);
             }
             Console.ReadLine();
+        }
+        static void FilteredFileFound (ref bool stopsearch, ref bool exclude, string name)
+        {
+            if (name.Contains("gggg"))
+            {
+                stopsearch = true;
+                Console.WriteLine("!");
+            }
+        }
+
+        static void FilteredDirFound(ref bool stopsearch, ref bool exclude, string name)
+        {
+            Console.WriteLine(name);
         }
 
     }

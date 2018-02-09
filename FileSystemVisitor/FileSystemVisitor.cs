@@ -7,14 +7,14 @@ using System.Linq;
 
 namespace FileSystemVisitor
 {
-//    Создайте класс FileSystemVisitor, который позволяет обходить дерево папок в файловой системе, начиная с указанной точки.Указанный класс должен:
-//•	Возвращать все найденные файлы и папки в виде линейной последовательности, для чего реализовать свой итератор(по возможности используя оператор yield)
-//•	Давать возможность задать алгоритм фильтрации найденных файлов и папок в момент создания экземпляра FileSystemVisitor(через специальный перегруженный конструктор). Алгоритм должен задаваться в виде делегата/лямбды
-//•	Генерировать уведомления(через механизм событий) о этапах своей работы.В частности, должны быть реализованы следующие события
-//o   Start и Finish (для начала и конца поиска)
-//o FileFinded/DirectoryFinded для всех найденных файлов и папок до фильтрации, и FilteredFileFinded/filteredDirectoryFinded для файлов и папок прошедших фильтрацию.Данные события должны позволять(через установку специальных флагов в переданных параметрах):
-//	прервать поиск
-//	исключить файлы/папки из конечного списка
+    //    Создайте класс FileSystemVisitor, который позволяет обходить дерево папок в файловой системе, начиная с указанной точки.Указанный класс должен:
+    //•	Возвращать все найденные файлы и папки в виде линейной последовательности, для чего реализовать свой итератор(по возможности используя оператор yield)
+    //•	Давать возможность задать алгоритм фильтрации найденных файлов и папок в момент создания экземпляра FileSystemVisitor(через специальный перегруженный конструктор). Алгоритм должен задаваться в виде делегата/лямбды
+    //•	Генерировать уведомления(через механизм событий) о этапах своей работы.В частности, должны быть реализованы следующие события
+    //o   Start и Finish (для начала и конца поиска)
+    //o FileFinded/DirectoryFinded для всех найденных файлов и папок до фильтрации, и FilteredFileFinded/filteredDirectoryFinded для файлов и папок прошедших фильтрацию.Данные события должны позволять(через установку специальных флагов в переданных параметрах):
+    //	прервать поиск
+    //	исключить файлы/папки из конечного списка
 
     class FileSystemVisitor : IEnumerable<string>
     {
@@ -32,11 +32,13 @@ namespace FileSystemVisitor
         public event EventHandler<FindedProgressArgs> FileFinded;
         public event EventHandler<FindedProgressArgs> DirectoryFinded;
 
-        public event EventHandler<FindedProgressArgs> FilteredFileFinded;
-        public event EventHandler<FindedProgressArgs> FilteredDirectoryFinded;
+        public delegate void FilteredItemFindedDelegate(ref bool stopSearch, ref bool exclude, string filename);
 
-        public bool StopSerach { get; set; }
-        public bool Exclude { get; set; }
+        public event FilteredItemFindedDelegate FilteredFileFinded;
+
+        public event FilteredItemFindedDelegate FilteredDirectoryFinded;
+
+        private bool StopSerach { get; set; }
 
         public FileSystemVisitor(string startingaddress, Func<string, bool> searchPredicate)
         {
@@ -80,18 +82,20 @@ namespace FileSystemVisitor
         {
             if (_searchPredicate.Invoke(s))
             {
+                bool exclude = false;
+                bool stopsearch = false;
                 if (isdir)
-{
-                    FilteredDirectoryFinded?.Invoke(this, new FindedProgressArgs { FoundedName = s });
+                {
+                    FilteredDirectoryFinded?.Invoke(ref stopsearch, ref exclude, s);
                 }
                 else
                 {
-                    FilteredFileFinded?.Invoke(this, new FindedProgressArgs { FoundedName = s });
+                    FilteredFileFinded?.Invoke(ref stopsearch, ref exclude, s);
                 }
+                StopSerach = stopsearch;
 
-                if (Exclude == true)
+                if (exclude == true)
                 {
-                    Exclude = false;
                     return false;
                 }
                 else return true;
