@@ -1,0 +1,4 @@
+
+*.exe
+FileSystemVisitor/bin/Debug/FileSystemVisitor.pdb
+*.pdb
