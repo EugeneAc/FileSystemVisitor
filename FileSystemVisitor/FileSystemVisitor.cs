@@ -26,7 +26,7 @@ namespace FileSystemVisitor
 
         public class FindedProgressArgs
         {
-            public string FoundedName { get; internal set; }
+            public string FoundName { get; internal set; }
         }
 
         public event EventHandler<FindedProgressArgs> FileFinded;
@@ -49,19 +49,18 @@ namespace FileSystemVisitor
         private IEnumerable<string> FindFiles()
         {
             Start?.Invoke(this, null);
-            System.IO.DirectoryInfo dir = new System.IO.DirectoryInfo(_startAddress);
+            
             var fileList = System.IO.Directory.GetFileSystemEntries(_startAddress, "*.*", SearchOption.AllDirectories)
                 .Where((s) => 
                 {
-                    
                     if (Directory.Exists(s))
                     {
-                        DirectoryFinded?.Invoke(this, new FindedProgressArgs { FoundedName = s });
+                        DirectoryFinded?.Invoke(this, new FindedProgressArgs { FoundName = s });
                         return CheckConditions(s,true);
                     }
                     else
                     {
-                        FileFinded?.Invoke(this, new FindedProgressArgs { FoundedName = s });
+                        FileFinded?.Invoke(this, new FindedProgressArgs { FoundName = s });
                         return CheckConditions(s);
                     }
                 }).TakeWhile((f)=>

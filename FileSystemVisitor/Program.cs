@@ -7,11 +7,11 @@ namespace FileSystemVisitor
         static void Main(string[] args)
         {
 
-            var visor = new FileSystemVisitor(@"d:\Test", name => name.Contains("txt"));
+            var visor = new FileSystemVisitor(@"d:\Test", name => name.Contains("d"));
             visor.Start += (s, e) => Console.WriteLine("Started");
             visor.Finish += (s, e) => Console.WriteLine("Finished");
-            visor.FileFinded += (s, e) => Console.WriteLine("File Finded " + e.FoundedName);
-            visor.DirectoryFinded += (s, e) => Console.WriteLine("Dir Finded " + e.FoundedName);
+            visor.FileFinded += (s, e) => Console.WriteLine("File Finded " + e.FoundName);
+            visor.DirectoryFinded += (s, e) => Console.WriteLine("Dir Finded " + e.FoundName);
             visor.FilteredDirectoryFinded += FilteredDirFound;
             visor.FilteredFileFinded += FilteredFileFound;
 
@@ -25,9 +25,9 @@ namespace FileSystemVisitor
         }
         static void FilteredFileFound (ref bool stopsearch, ref bool exclude, string name)
         {
-            if (name.Contains("gggg"))
+            if (name.Contains("1"))
             {
-                stopsearch = true;
+                exclude = true;
                 Console.WriteLine("!");
             }
         }
