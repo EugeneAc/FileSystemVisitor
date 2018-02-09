@@ -1,0 +1,8 @@
+D:\D1-D2\01. Advanced C#\MyTask\FileSystemVisitor\FileSystemVisitor\obj\Debug\FileSystemVisitor.csprojResolveAssemblyReference.cache
+D:\D1-D2\01. Advanced C#\MyTask\FileSystemVisitor\FileSystemVisitor\obj\Debug\FileSystemVisitor.csproj.CoreCompileInputs.cache
+D:\D1-D2\01. Advanced C#\MyTask\FileSystemVisitor\FileSystemVisitor\bin\Debug\FileSystemVisitor.exe.config
+D:\D1-D2\01. Advanced C#\MyTask\FileSystemVisitor\FileSystemVisitor\bin\Debug\FileSystemVisitor.exe
+D:\D1-D2\01. Advanced C#\MyTask\FileSystemVisitor\FileSystemVisitor\bin\Debug\FileSystemVisitor.pdb
+D:\D1-D2\01. Advanced C#\MyTask\FileSystemVisitor\FileSystemVisitor\obj\Debug\FileSystemVisitor.exe
+D:\D1-D2\01. Advanced C#\MyTask\FileSystemVisitor\FileSystemVisitor\obj\Debug\FileSystemVisitor.pdb
+D:\D1-D2\01. Advanced C#\MyTask\FileSystemVisitor\FileSystemVisitor\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
