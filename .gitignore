@@ -2,3 +2,9 @@
 *.exe
 FileSystemVisitor/bin/Debug/FileSystemVisitor.pdb
 *.pdb
+.vs/FileSystemVisitor/v15/.suo
+.vs/FileSystemVisitor/v15/.suo
+FileSystemVisitor/bin/Debug/FileSystemVisitor.exe
+FileSystemVisitor/bin/Debug/FileSystemVisitor.pdb
+FileSystemVisitor/obj/Debug/FileSystemVisitor.exe
+FileSystemVisitor/obj/Debug/FileSystemVisitor.pdb

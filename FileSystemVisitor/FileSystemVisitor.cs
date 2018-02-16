@@ -24,7 +24,7 @@ namespace FileSystemVisitor
         public event EventHandler Start;
         public event EventHandler Finish;
 
-        public class FindedProgressArgs
+        public class FindedProgressArgs : EventArgs
         {
             public string FoundName { get; internal set; }
         }
@@ -32,11 +32,17 @@ namespace FileSystemVisitor
         public event EventHandler<FindedProgressArgs> FileFinded;
         public event EventHandler<FindedProgressArgs> DirectoryFinded;
 
-        public delegate void FilteredItemFindedDelegate(ref bool stopSearch, ref bool exclude, string filename);
+        public class FilteredFindedProgressArgs : EventArgs
+        {
+            public string FoundName { get; internal set; }
 
-        public event FilteredItemFindedDelegate FilteredFileFinded;
+            public bool StopSearch { get; set; }
 
-        public event FilteredItemFindedDelegate FilteredDirectoryFinded;
+            public bool Exclude { get; set; }
+        }
+
+        public event EventHandler<FilteredFindedProgressArgs> FilteredFileFinded;
+        public event EventHandler<FilteredFindedProgressArgs> FilteredDirectoryFinded;
 
         private bool StopSerach { get; set; }
 
@@ -81,23 +87,23 @@ namespace FileSystemVisitor
         {
             if (_searchPredicate.Invoke(s))
             {
-                bool exclude = false;
-                bool stopsearch = false;
+                var args = new FilteredFindedProgressArgs();
+                args.FoundName = s;
                 if (isdir)
                 {
-                    FilteredDirectoryFinded?.Invoke(ref stopsearch, ref exclude, s);
+                    FilteredDirectoryFinded?.Invoke(this, args);
                 }
                 else
                 {
-                    FilteredFileFinded?.Invoke(ref stopsearch, ref exclude, s);
+                    FilteredFileFinded?.Invoke(this, args);
                 }
-                StopSerach = stopsearch;
+                StopSerach = args.StopSearch;
 
-                if (exclude == true)
+                if (args.Exclude)
                 {
                     return false;
                 }
-                else return true;
+                return true;
             }
             else
                 return false;
